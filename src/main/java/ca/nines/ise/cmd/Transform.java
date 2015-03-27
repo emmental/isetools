@@ -26,10 +26,14 @@ import ca.nines.ise.writer.Writer;
 import ca.nines.ise.writer.RTFWriter;
 import ca.nines.ise.writer.TextWriter;
 import ca.nines.ise.writer.XMLWriter;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
@@ -80,24 +84,33 @@ public class Transform extends Command {
     }
 
     String[] files = getArgList(cmd);
-    DOM dom = new DOMBuilder(new File(files[0])).build();
-    if (dom.getStatus() != DOMStatus.ERROR) {
-      if (files.length == 2) {
-        Annotation ann = Annotation.builder().from(new File(files[1])).build();
-        renderer.render(dom, ann);
-      } else {
-        renderer.render(dom);
-      }
-    } else {
-      Message m = Message.builder("dom.errors")
-              .setSource(dom.getSource())
-              .build();
-      log.add(m);
-    }
-    if (log.count() > 0) {
-      System.err.println(log.count() + " errors or warnings.");
-      System.err.println(log);
-    }
+    DOM dom;
+    if (files.length > 0 ){
+    	if (Files.isReadable(Paths.get(files[0]))){
+	    	dom = new DOMBuilder(new File(files[0])).build();
+		    if (dom.getStatus() != DOMStatus.ERROR) {
+		      if (files.length == 2) {
+		        Annotation ann = Annotation.builder().from(new File(files[1])).build();
+		        renderer.render(dom, ann);
+		      } else {
+		        renderer.render(dom);
+		      }
+		    } else {
+		      Message m = Message.builder("dom.errors")
+		              .setSource(dom.getSource())
+		              .build();
+		      log.add(m);
+		    }
+    	}else{
+    		System.err.println("input file doesn't exist");
+    	}
+	    if (log.count() > 0) {
+	      System.err.println(log.count() + " errors or warnings.");
+	      System.err.println(log);
+	    }
+    }else{
+    	System.err.println("input file required");
+    }    
     log.clear();
   }
 
