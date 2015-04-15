@@ -115,7 +115,7 @@
             <version>2.1.7</version>
         </dependency>
         <dependency>
-            <groupId>nu.xom</groupId>
+            <groupId>com.io7m.xom</groupId>
             <artifactId>xom</artifactId>
             <version>1.2.10</version>
         </dependency>
