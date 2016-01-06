@@ -112,7 +112,7 @@ public class DOMBuilder extends ISEParserBaseListener implements BuilderInterfac
    * @throws java.io.IOException
    */
   public DOMBuilder(InputStream in, String source) throws IOException {
-    DOMStream domStream = new DOMStream(in, source);
+    DOMStream domStream = new DOMStream(in, source, dom.getLog());
     dom.setSource(source);
     dom.setLines(domStream.getLines());
     ais = new ANTLRInputStream(domStream.getContent());
@@ -127,7 +127,7 @@ public class DOMBuilder extends ISEParserBaseListener implements BuilderInterfac
    * @throws java.io.IOException
    */
   public DOMBuilder(String in) throws IOException {
-    DOMStream domStream = new DOMStream(in);
+    DOMStream domStream = new DOMStream(in,dom.getLog());
     dom.setSource("#STRING");
     dom.setLines(domStream.getLines());
     ais = new ANTLRInputStream(domStream.getContent());
@@ -144,7 +144,7 @@ public class DOMBuilder extends ISEParserBaseListener implements BuilderInterfac
    * @throws IOException if the file cannot be read.
    */
   public DOMBuilder(File in) throws FileNotFoundException, IOException {
-    DOMStream domStream = new DOMStream(in);
+    DOMStream domStream = new DOMStream(in,dom.getLog());
     dom.setSource(in.getCanonicalPath());
     dom.setLines(domStream.getLines());
     ais = new ANTLRInputStream(domStream.getContent());

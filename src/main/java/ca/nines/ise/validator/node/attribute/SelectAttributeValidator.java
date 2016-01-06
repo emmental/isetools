@@ -48,7 +48,7 @@ public class SelectAttributeValidator implements AttributeValidator {
     "validator.attribute.badselect"
   })
   @Override
-  public void validate(TagNode n, Attribute attr) {
+  public void validate(TagNode n, Attribute attr, Log log) {
     String value = n.getAttribute(attr.getName());
     String[] options = attr.getOptions();
     if (!ArrayUtils.contains(options, value)) {
@@ -56,7 +56,7 @@ public class SelectAttributeValidator implements AttributeValidator {
               .fromNode(n)
               .addNote("Attribute " + attr.getName() + " cannot contain " + value)
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

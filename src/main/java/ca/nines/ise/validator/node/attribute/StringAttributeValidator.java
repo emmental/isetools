@@ -48,14 +48,14 @@ public class StringAttributeValidator implements AttributeValidator {
     "validator.attribute.badstring"
   })
   @Override
-  public void validate(TagNode n, Attribute attr) {
+  public void validate(TagNode n, Attribute attr, Log log) {
     String value = n.getAttribute(attr.getName());
     if (StringUtils.isWhitespace(value)) {
       Message m = Message.builder("validator.attribute.badstring")
               .fromNode(n)
               .addNote("Attribute " + attr.getName() + "=\"" + value + "\" only contains whitespace.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

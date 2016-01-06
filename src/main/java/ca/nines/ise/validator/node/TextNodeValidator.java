@@ -42,18 +42,18 @@ public class TextNodeValidator implements NodeValidator<TextNode> {
     "validator.text.badunicode"
   })
   @Override
-  public void validate(TextNode n, Schema schema) {
+  public void validate(TextNode n, Schema schema, Log log) {
     if (n.getText().contains("#")) {
       Message m = Message.builder("validator.text.depreciatedhash")
               .fromNode(n)
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
     if (n.getText().contains("\uFFFD")) {
       Message m = Message.builder("validator.text.badunicode")
               .fromNode(n)
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

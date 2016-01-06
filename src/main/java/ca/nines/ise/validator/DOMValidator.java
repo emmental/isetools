@@ -83,7 +83,7 @@ public class DOMValidator {
       if (validator == null) {
         throw new Exception("Unknown node type: " + n.type());
       }
-      validator.validate(n, schema);
+      validator.validate(n, schema, dom.getLog());
     }
   }
 

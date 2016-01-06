@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node.attribute;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import ca.nines.ise.schema.Attribute;
 import ca.nines.ise.node.TagNodeImpl;
@@ -42,38 +43,39 @@ public class ListAttributeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     TagNode n = new TagNodeImpl();
     n.setName("LIST");
     Attribute attr = schema.getTag(n.getName()).getAttribute("items");
     ListAttributeValidator instance = new ListAttributeValidator();
 
     n.setAttribute("items", "earth");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("items", "air, wind, basil");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("items", "basil, wind, air");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("items", "minty");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badlist"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badlist"},log);
 
     n.setAttribute("items", "fire, minty, smiles");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badlist"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badlist"},log);
 
     n.setAttribute("items", "minty, smiles");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badlist"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badlist"},log);
 
     n.setAttribute("items", "");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badlist"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badlist"},log);
   }
 
 }

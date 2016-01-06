@@ -17,6 +17,7 @@
 package ca.nines.ise.node;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.validator.node.TestBase;
 import java.util.Iterator;
 import org.junit.Assert;
@@ -42,6 +43,7 @@ public class AbbrNodeTest extends TestBase {
     abbr.setTLN("11.3");
 
     Fragment result = abbr.expanded();
+    Log log = result.getLog();
     Iterator<Node> iterator = result.iterator();
     Node node;
 
@@ -98,7 +100,7 @@ public class AbbrNodeTest extends TestBase {
     assertEquals("11.3", node.getTLN());
     assertEquals("ABBR", node.getName());
 
-    checkLog();
+    checkLog(log);
   }
 
   /**
@@ -114,6 +116,7 @@ public class AbbrNodeTest extends TestBase {
     abbr.setTLN("11.3");
 
     Fragment result = abbr.expanded();
+    Log log = result.getLog();
     Iterator<Node> iterator = result.iterator();
     Node node;
 
@@ -145,7 +148,7 @@ public class AbbrNodeTest extends TestBase {
     assertEquals("11.3", node.getTLN());
     assertEquals("ABBR", node.getName());
 
-    checkLog();
+    checkLog(log);
   }
 
   /**

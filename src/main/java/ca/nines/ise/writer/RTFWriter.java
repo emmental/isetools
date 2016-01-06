@@ -71,6 +71,8 @@ public class RTFWriter extends Writer {
     private RtfParagraphStyle p2;
     private RtfParagraphStyle prose;
     private RtfParagraphStyle fnStyle;
+    
+    private Log log;
 
     public RTFWriter() throws UnsupportedEncodingException, ParserConfigurationException {
         this(System.out);
@@ -121,6 +123,8 @@ public class RTFWriter extends Writer {
         fnStyle.setIndentRight(0);
         fnStyle.setSize(10);        
         writer.getDocumentSettings().registerParagraphStyle(fnStyle);
+        
+        log = new Log();
     }
 
     private void startParagraph() throws DocumentException {
@@ -181,7 +185,7 @@ public class RTFWriter extends Writer {
                         .addNote("lemSplit: " + note.isLemSplit() + " tlnSplit: " + note.isTlnSplit())
                         .addNote(note.toString())
                         .build();
-                Log.addMessage(m);
+                log.addMessage(m);
                 continue;
             }
             offset += lemmaStr.length();
@@ -201,11 +205,13 @@ public class RTFWriter extends Writer {
 
     @Override
     public void render(DOM dom) throws DocumentException, IOException {
+        log = dom.getLog();
         render(dom, Annotation.builder().build());
     }
 
     @Override
     public void render(DOM dom, Annotation annotation) throws DocumentException, IOException {
+        log = dom.getLog();  
         this.preprocess(dom, annotation);
 
         fontStack = new ArrayDeque<>();

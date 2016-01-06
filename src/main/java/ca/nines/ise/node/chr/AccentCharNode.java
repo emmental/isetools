@@ -50,6 +50,7 @@ public class AccentCharNode extends CharNode {
   @Override
   public Fragment expanded() {
     char[] cs = super.innerText().toCharArray();
+    Log log = new Log();
 
     String accent = charMap.get(innerText().substring(0, 1));
     if (accent == null) {
@@ -58,11 +59,11 @@ public class AccentCharNode extends CharNode {
               .fromNode(this)
               .addNote("Character " + text + " cannot be expanded.")
               .build();
-      Log.getInstance().add(m);
+      log.add(m);
     }
     String str = "" + cs[1] + accent;
     str = Normalizer.normalize(str, Form.NFC);
-    return wrap("ACCENT", str);
+    return wrap("ACCENT", str, log);
   }
 
   /**

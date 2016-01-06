@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CommentNode;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,28 +40,29 @@ public class CommentNodeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     CommentNodeValidator validator = new CommentNodeValidator();
     CommentNode n;
 
     n = new CommentNode();
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.comment.badstart", "validator.comment.badend"});
+    validator.validate(n, schema, log);
+    checkLog(new String[]{"validator.comment.badstart", "validator.comment.badend"}, log);
 
     n.setText("<! bad start, good end. -->");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.comment.badstart"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.comment.badstart"},log);
 
     n.setText("<!-- good start, bad end. >");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.comment.badend"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.comment.badend"},log);
 
     n.setText("<!-- dashes -- dashes -->");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.comment.dashes"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.comment.dashes"},log);
 
     n.setText("<!-- good comment. -->");
-    validator.validate(n, schema);
-    checkLog(new String[]{});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{},log);
   }
 
 }

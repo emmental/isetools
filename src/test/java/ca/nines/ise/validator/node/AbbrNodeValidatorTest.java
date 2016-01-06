@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.AbbrNode;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,16 +40,17 @@ public class AbbrNodeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     AbbrNodeValidator validator = new AbbrNodeValidator();
     AbbrNode n = new AbbrNode();
     n.setText("|a^b|");
 
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.abbr.depreciated"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.abbr.depreciated"}, log);
 
     n.setText("|supercalafraglistic|");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.abbr.depreciated", "validator.abbr.long"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.abbr.depreciated", "validator.abbr.long"}, log);
   }
 
 }

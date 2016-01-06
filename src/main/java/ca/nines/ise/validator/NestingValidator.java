@@ -43,7 +43,7 @@ public class NestingValidator {
     "validator.nesting.split",
     "validator.nesting.missing_start_tag"
   })
-  private void process_end(EndNode n) {
+  private void process_end(EndNode n, Log log) {
     if (nodeStack.peekFirst().getName().toLowerCase().equals(n.getName().toLowerCase())) {
       nodeStack.pop();
       return;
@@ -53,7 +53,7 @@ public class NestingValidator {
             .fromNode(n)
             .addNote("Tag " + n.getName() + " splits other tags.")
             .build();
-    Log.addMessage(m);
+    log.addMessage(m);
 
     // this is a split tag.
     ArrayDeque<StartNode> splitStack = new ArrayDeque<>();
@@ -70,7 +70,7 @@ public class NestingValidator {
               .fromNode(n)
               .addNote("Cannot find start tag that corresponds to end tag " + n.getName())
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
 
     while (splitStack.size() >= 1) {
@@ -82,7 +82,7 @@ public class NestingValidator {
   @ErrorCode(code = {
     "validator.nesting.recursive"
   })
-  private void process_start(StartNode n) {
+  private void process_start(StartNode n, Log log) {
     for (StartNode s : nodeStack) {
       if (s.getName().toLowerCase().equals(n.getName().toLowerCase())) {
         Message m = Message.builder("validator.nesting.recursive")
@@ -90,7 +90,7 @@ public class NestingValidator {
                 .addNote("Tag " + n.getName() + " cannot be recursive.")
                 .addNote("Or the tag " + s.getName() + " at TLN " + s.getTLN() + " on line " + s.getLine() + " may be unclosed.")
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
       }
     }
     nodeStack.push(n);
@@ -98,14 +98,15 @@ public class NestingValidator {
 
   public void validate(DOM dom) {
     nodeStack = new ArrayDeque<>();
+    Log log = dom.getLog();
 
     for (Node n : dom) {
       switch (n.type()) {
         case END:
-          process_end((EndNode) n);
+          process_end((EndNode) n, log);
           break;
         case START:
-          process_start((StartNode) n);
+          process_start((StartNode) n, log);
           break;
       }
     }
@@ -115,7 +116,7 @@ public class NestingValidator {
               .fromNode(n)
               .addNote("Start tag " + n.getName() + " has no matching end tag")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
 
   }

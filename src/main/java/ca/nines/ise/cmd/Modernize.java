@@ -60,7 +60,6 @@ public class Modernize extends Command {
   public void execute(CommandLine cmd) throws Exception {
     PrintStream out;
     Writer renderer;
-    Log log = Log.getInstance();
     Locale.setDefault(Locale.ENGLISH);
     out = new PrintStream(System.out, true, "UTF-8");
     if (cmd.hasOption("o")) {
@@ -70,6 +69,7 @@ public class Modernize extends Command {
     renderer = new SGMLWriter(out);
     String[] files = getArgList(cmd);
     DOM dom = new DOMBuilder(new File(files[0])).build();
+    Log log = dom.getLog();
     if (dom.getStatus() == DOMStatus.ERROR) {
       System.err.println("Document contains errors. Cannot continue.");
       if (log.count() > 0) {

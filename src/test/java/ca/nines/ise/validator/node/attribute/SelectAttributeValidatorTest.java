@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node.attribute;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import ca.nines.ise.schema.Attribute;
 import ca.nines.ise.node.TagNodeImpl;
@@ -42,30 +43,31 @@ public class SelectAttributeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     TagNode n = new TagNodeImpl();
     n.setName("SEL");
     Attribute attr = schema.getTag(n.getName()).getAttribute("opt");
     SelectAttributeValidator instance = new SelectAttributeValidator();
 
     n.setAttribute("opt", "thyme");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("opt", "mint");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("opt", "basil");
-    instance.validate(n, attr);
-    checkLog(new String[]{});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("opt", "minty");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badselect"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badselect"},log);
 
     n.setAttribute("opt", "");
-    instance.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badselect"});
+    instance.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badselect"},log);
   }
 
 }

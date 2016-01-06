@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.StartNode;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,28 +40,29 @@ public class StartNodeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() throws Exception {
+    Log log = new Log();
     StartNode n = new StartNode();
     StartNodeValidator validator = new StartNodeValidator();
 
     n.setName("EMPTY");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.tag.startempty"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.tag.startempty"},log);
 
     n.setName("OPT");
-    validator.validate(n, schema);
-    checkLog(new String[]{});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("NOATTR");
-    validator.validate(n, schema);
-    checkLog(new String[]{});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("FOO");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.tag.unknown"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.tag.unknown"},log);
 
     n.setName("DEPTAG");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.tag.depreciated"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.tag.depreciated"},log);
   }
 
 }

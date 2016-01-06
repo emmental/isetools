@@ -135,8 +135,9 @@ abstract public class CharNode extends Node {
    * @param content
    * @return Fragment wrapping content.
    */
-  protected Fragment wrap(String tagName, String content) {
-    Fragment dom = new Fragment();
+  protected Fragment wrap(String tagName, String content, Log l) {
+    Fragment dom = new Fragment(l);
+    Log log = dom.getLog();
     TagNode node;
 
     node = new StartNode(this);
@@ -151,7 +152,7 @@ abstract public class CharNode extends Node {
               .fromNode(this)
               .addNote("Character " + text + " cannot be expanded.")
               .build();
-      Log.getInstance().add(m);
+      log.add(m);
     }
     textNode.setText(content);
     dom.add(textNode);

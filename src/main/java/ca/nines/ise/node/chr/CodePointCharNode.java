@@ -61,11 +61,11 @@ public class CodePointCharNode extends CharNode {
    * @param base
    * @return Fragment
    */
-  private Fragment expandNumeric(String value, int base) {
+  private Fragment expandNumeric(String value, int base, Log log) {
     int codePoint = Integer.parseInt(value, base);
     char[] c = Character.toChars(codePoint);
     String str = Normalizer.normalize(new String(c), Normalizer.Form.NFC);
-    return wrap("CODEPOINT", str);
+    return wrap("CODEPOINT", str, log);
   }
 
   /**
@@ -76,7 +76,7 @@ public class CodePointCharNode extends CharNode {
    * @return Fragment.
    * @throws IOException
    */
-  private Fragment expandNamed(String value) throws IOException {
+  private Fragment expandNamed(String value, Log log) throws IOException {
     if (tbl == null) {
       tbl = CodePointTable.defaultCodePointTable();
     }
@@ -86,10 +86,10 @@ public class CodePointCharNode extends CharNode {
               .fromNode(this)
               .addNote("The named character " + innerText() + " is not defined.")
               .build();
-      Log.getInstance().add(message);
-      return wrap("CODEPOINT", "\uFFFD");
+      log.add(message);
+      return wrap("CODEPOINT", "\uFFFD", log);
     } else {
-      return wrap("CODEPOINT", cp.getValue());
+      return wrap("CODEPOINT", cp.getValue(), log);
     }
   }
 
@@ -103,27 +103,28 @@ public class CodePointCharNode extends CharNode {
   public Fragment expanded() throws IOException {
 
     Matcher m;
+    Log log = new Log();
 
 	// @TODO these should be refactored into classes, and the parser
     // should distinguish them.
     m = hexEntity.matcher(innerText());
     if (m.matches()) {
-      return expandNumeric(m.group(1), 16);
+      return expandNumeric(m.group(1), 16, log);
     }
     m = decimalEntity.matcher(innerText());
     if (m.matches()) {
-      return expandNumeric(m.group(1), 10);
+      return expandNumeric(m.group(1), 10, log);
     }
     m = namedEntity.matcher(innerText());
     if (m.matches()) {
-      return expandNamed(m.group(1));
+      return expandNamed(m.group(1), log);
     }
     Message message = Message.builder("char.codepoint.unknown")
             .fromNode(this)
             .addNote("Cannot parse " + innerText() + " as a code point.")
             .build();
-    Log.getInstance().add(message);
-    return null;
+    log.add(message);
+    return new Fragment(log);
   }
 
   /**

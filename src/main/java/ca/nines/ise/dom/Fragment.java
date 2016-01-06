@@ -16,10 +16,20 @@
  */
 package ca.nines.ise.dom;
 
+import ca.nines.ise.log.Log;
+
 /**
  * A Fragment is a piece of a DOM. They are identical to DOMs in almost every
  * way: validations may be different for Fragments.
  * <p>
  */
 public class Fragment extends DOM {
+  
+  public Fragment(Log log){
+    super(log);
+  }
+  
+  public Fragment(){
+    super();
+  }
 }

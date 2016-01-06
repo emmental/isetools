@@ -50,7 +50,7 @@ public class CommentNodeValidator implements NodeValidator<CommentNode> {
     "validator.comment.dashes"
   })
   @Override
-  public void validate(CommentNode n, Schema schema) {
+  public void validate(CommentNode n, Schema schema, Log log) {
     Message m;
     String text = n.getText();
     if (!text.startsWith("<!--")) {
@@ -58,14 +58,14 @@ public class CommentNodeValidator implements NodeValidator<CommentNode> {
               .fromNode(n)
               .addNote("The comment started with " + text.substring(0, Math.min(text.length(), 4)))
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
     if (!text.endsWith("-->")) {
       m = Message.builder("validator.comment.badend")
               .fromNode(n)
               .addNote("The comment ended with " + text.substring(Math.max(0, text.length() - 3)))
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
     text = text.replaceAll("^(<!--)|(-->)$", "");
     if (text.contains("--")) {
@@ -73,7 +73,7 @@ public class CommentNodeValidator implements NodeValidator<CommentNode> {
               .fromNode(n)
               .addNote("after replace: " + text)
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

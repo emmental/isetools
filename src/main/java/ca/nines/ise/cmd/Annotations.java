@@ -56,7 +56,6 @@ public class Annotations extends Command {
   })
   @Override
   public void execute(CommandLine cmd) throws Exception {
-    Log log = Log.getInstance();
     Locale.setDefault(Locale.ENGLISH);
     PrintStream logOut = new PrintStream(System.out, true, "UTF-8");
 
@@ -79,6 +78,8 @@ public class Annotations extends Command {
     }
 
     DOM dom = new DOMBuilder(docFile).build();
+    Log log = dom.getLog();
+    
     if (dom.getStatus() != DOM.DOMStatus.ERROR) {
       Annotation annotation = Annotation.builder().from(annFile).build();
       AnnotationValidator av = new AnnotationValidator();

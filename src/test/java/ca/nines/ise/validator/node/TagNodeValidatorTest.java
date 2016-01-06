@@ -17,6 +17,7 @@
 package ca.nines.ise.validator.node;
 
 import ca.nines.ise.node.TagNodeImpl;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,49 +43,50 @@ public class TagNodeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate_attributes() throws Exception {
+    Log log = new Log();
     TagNode n = new TagNodeImpl();
     TagNodeValidator<?> instance = new TagNodeValidatorImpl();
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("NONEXISTANT");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("NOATTR");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("non", "yes");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{"validator.attribute.unknown"});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{"validator.attribute.unknown"},log);
     n.clearAttributes();
 
     n.setName("ONEATTR");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{"validator.attribute.missing"});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{"validator.attribute.missing"},log);
 
     n.setAttribute("n", "");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{"validator.attribute.nonempty"});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{"validator.attribute.nonempty"},log);
 
     n.setAttribute("n", "3");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("TWOATTRS");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{"validator.attribute.missing"});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{"validator.attribute.missing"},log);
 
     n.setAttribute("b", "3");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setName("DEPAT");
     n.clearAttributes();
     n.setAttribute("foo", "yes");
-    instance.validate_attributes(n, schema);
-    checkLog(new String[]{"validator.attribute.depreciated"});
+    instance.validate_attributes(n, schema,log);
+    checkLog(new String[]{"validator.attribute.depreciated"},log);
   }
 
 }

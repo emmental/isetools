@@ -41,10 +41,10 @@ public class Tester {
      * @param args command line arguments.
      */
     public static void main(String[] args) throws IOException {
-        Log log = Log.getInstance();
         String s = "<b/>text ... -- {#} <a></a>";
         System.out.println(s);
         DOM d = new DOMBuilder(s).build();
+        Log log = d.getLog();
         Transformer id = new Text();
         System.out.println(d);
         DOM td = id.transform(d);

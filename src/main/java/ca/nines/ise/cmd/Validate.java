@@ -56,7 +56,6 @@ public class Validate extends Command {
   public void execute(CommandLine cmd) throws Exception {
     File[] files;
 
-    Log log = Log.getInstance();
     Locale.setDefault(Locale.ENGLISH);
     Schema schema = Schema.defaultSchema();
     DOMValidator dv = new DOMValidator();
@@ -72,6 +71,7 @@ public class Validate extends Command {
       out.println("Found " + files.length + " files to check.");
       for (File in : files) {
         DOM dom = new DOMBuilder(in).build();
+        Log log = dom.getLog();
         if (dom.getStatus() != DOM.DOMStatus.ERROR) {
           dv.validate(dom, schema);
           nv.validate(dom);

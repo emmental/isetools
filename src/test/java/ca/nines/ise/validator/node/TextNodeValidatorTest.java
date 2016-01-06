@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TextNode;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,22 +40,23 @@ public class TextNodeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     TextNodeValidator validator = new TextNodeValidator();
     TextNode n = new TextNode();
-    validator.validate(n, schema);
-    checkLog(new String[]{});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setText("foo bar yes please.");
-    validator.validate(n, schema);
-    checkLog(new String[]{});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{},log);
 
     n.setText("foo \uFFFD yes please.");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.text.badunicode"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.text.badunicode"},log);
 
     n.setText("foo # yes please.");
-    validator.validate(n, schema);
-    checkLog(new String[]{"validator.text.depreciatedhash"});
+    validator.validate(n, schema,log);
+    checkLog(new String[]{"validator.text.depreciatedhash"},log);
   }
 
 }

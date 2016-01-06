@@ -63,7 +63,7 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
    * an attribute of an unknown type.
    */
   @Override
-  abstract public void validate(T node, Schema schema) throws AttributeTypeException;
+  abstract public void validate(T node, Schema schema, Log log) throws AttributeTypeException;
 
   /**
    * Validate an attribute, by calling one of the validate_attribute_*
@@ -84,13 +84,13 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
   @ErrorCode(code = {
     "validator.attribute.unknowntype"
   })
-  public void validate_attribute(TagNode n, Attribute attr) throws AttributeTypeException {
+  public void validate_attribute(TagNode n, Attribute attr, Log log) throws AttributeTypeException {
     AttributeType at = attr.getType();
     AttributeValidator v = TagNodeValidator.validators.get(attr.getType());
     if (v == null) {
       throw new AttributeTypeException("Unknown attribute type: " + at.name());
     }
-    v.validate(n, attr);
+    v.validate(n, attr, log);
   }
 
   /**
@@ -120,7 +120,7 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
     "validator.attribute.depreciated",
     "validator.attribute.nonempty",
     "validator.attribute.missing",})
-  public void validate_attributes(TagNode n, Schema schema) throws AttributeTypeException {
+  public void validate_attributes(TagNode n, Schema schema, Log log) throws AttributeTypeException {
     String tagName = n.getName();
     Tag tag = schema.getTag(tagName);
     Message m;
@@ -137,7 +137,7 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
                 .fromNode(n)
                 .addNote("The schema does not define attribute " + name + " for tag " + tagName + ".")
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
         continue;
       }
       if (attr.isDepreciated()) {
@@ -145,7 +145,7 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
                 .fromNode(n)
                 .addNote(attr.getDepreciated())
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
         continue;
       }
       String attrValue = n.getAttribute(name);
@@ -158,10 +158,10 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
                 .fromNode(n)
                 .addNote("Attribute " + name + " must not be empty for tag " + tagName + ".")
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
         continue;
       }
-      validate_attribute(n, attr);
+      validate_attribute(n, attr, log);
     }
     for (String attrName : tag.getAttributeNames()) {
       Attribute attr = tag.getAttribute(attrName);
@@ -174,7 +174,7 @@ abstract public class TagNodeValidator<T extends TagNode> implements NodeValidat
                 .fromNode(n)
                 .addNote("Attribute " + attrName + " is required for " + tagName + " tags")
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
       }
     }
 

@@ -37,7 +37,8 @@ abstract public class ApparatusValidator<T extends Apparatus<? extends Lemma>> {
   private static final Pattern singleTlnPattern = Pattern.compile("\\p{Digit}+(?:\\.\\p{Digit}+)?");
   private static final Pattern splitTlnPattern = Pattern.compile("(\\p{Digit}+(?:\\.\\p{Digit}+)?) ?- ?(\\p{Digit}+(?:\\.\\p{Digit}+)?)");
   private static final Pattern splitLemPattern = Pattern.compile("(.*?) ?. . . ?(.*?)");
-
+  public static Log log = new Log();
+  
   public void validate(Lemma lem) {
     Matcher matcher;
     String cName = lem.getClass().getSimpleName().toLowerCase();
@@ -56,7 +57,7 @@ abstract public class ApparatusValidator<T extends Apparatus<? extends Lemma>> {
             .fromLemma(lem)
             .addNote("The invalid TLN looks like " + lem.getTln())
             .build();
-    Log.addMessage(m);
+    log.addMessage(m);
   }
 
   private void matchTlnLemma(DOM dom, String tln, String lemmaString, Lemma lemma, String cName) throws IOException {
@@ -68,7 +69,7 @@ abstract public class ApparatusValidator<T extends Apparatus<? extends Lemma>> {
               .fromLemma(lemma)
               .addNote("Could not find TLN " + tln + " in the document.")
               .build();
-      Log.addMessage(m);
+      dom.getLog().addMessage(m);
       return;
     }
 
@@ -82,7 +83,7 @@ abstract public class ApparatusValidator<T extends Apparatus<? extends Lemma>> {
               .fromLemma(lemma)
               .addNote("Lemma \"" + lemmaString + "\" did not match the document text \"" + tlnString + "\"")
               .build();
-      Log.addMessage(m);
+      dom.getLog().addMessage(m);
     }
   }
 

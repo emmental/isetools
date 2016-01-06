@@ -17,6 +17,7 @@
 package ca.nines.ise.validator.node;
 
 import ca.nines.ise.exceptions.AttributeTypeException;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.Node;
 import ca.nines.ise.schema.Schema;
 
@@ -38,6 +39,6 @@ abstract public interface NodeValidator<T extends Node> {
    * @throws ca.nines.ise.exceptions.AttributeTypeException if the node has an
    * attribute with an unknown type.
    */
-  abstract public void validate(T n, Schema schema) throws AttributeTypeException;
+  abstract public void validate(T n, Schema schema, Log log) throws AttributeTypeException;
 
 }

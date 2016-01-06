@@ -30,7 +30,7 @@ public class XMLLogSerializerTest {
 
     @Before
     public void setup() {
-        l = Log.getInstance();
+        l = new Log();
     }
 
     @Test

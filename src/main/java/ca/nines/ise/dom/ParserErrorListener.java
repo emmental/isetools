@@ -66,7 +66,7 @@ public class ParserErrorListener extends BaseErrorListener {
             .setLine(dom.getLine(line - 1))
             .addNote(msg.substring(0, Math.min(64, msg.length())))
             .build();
-    Log.addMessage(m);
+    dom.getLog().addMessage(m);
   }
 
 }

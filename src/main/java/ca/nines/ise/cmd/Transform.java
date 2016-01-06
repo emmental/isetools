@@ -64,7 +64,6 @@ public class Transform extends Command {
       out = new PrintStream(new FileOutputStream(cmd.getOptionValue("o")), true, "UTF-8");
     }
 
-    Log log = Log.getInstance();
     Writer renderer = null;
 
     if (cmd.hasOption("text")) {
@@ -77,7 +76,7 @@ public class Transform extends Command {
       renderer = new RTFWriter(out);
     }
     if(cmd.hasOption("sgml")) {
-        renderer = new SGMLWriter(out);
+      renderer = new SGMLWriter(out);
     }
 
     if (renderer == null) {
@@ -88,6 +87,7 @@ public class Transform extends Command {
 
     String[] files = getArgList(cmd);
     DOM dom = new DOMBuilder(new File(files[0])).build();
+    Log log = dom.getLog();
     
     Schema schema = Schema.defaultSchema();    
     DOMValidator dv = new DOMValidator();

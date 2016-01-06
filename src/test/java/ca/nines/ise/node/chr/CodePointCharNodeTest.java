@@ -17,6 +17,7 @@
 package ca.nines.ise.node.chr;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 import ca.nines.ise.node.Node;
 import ca.nines.ise.node.TagNode;
@@ -190,9 +191,11 @@ public class CodePointCharNodeTest extends TestBase {
   public void testUnicodify(String text, String unicode, String[] errors) throws IOException {
     CharNode c = new CodePointCharNode();
     c.setText(text);
-    String u = c.unicode();
+    Fragment f = c.expanded();
+    String u = f.unicode();
+    Log log = f.getLog();
     assertEquals(u, Normalizer.normalize(unicode, Normalizer.Form.NFC));
-    checkLog(errors);
+    checkLog(errors,log);
   }
 
   private void testExpansion(String text, String unicode) throws IOException {
@@ -207,6 +210,7 @@ public class CodePointCharNodeTest extends TestBase {
     charNode.setLine(420);
     charNode.setTLN("11.3");
     Fragment dom = charNode.expanded();
+    Log log = dom.getLog();
     Iterator<Node> iterator = dom.iterator();
     Node node;
 
@@ -236,7 +240,7 @@ public class CodePointCharNodeTest extends TestBase {
     assertEquals(420, node.getLine());
     assertEquals("11.3", node.getTLN());
     assertEquals("CODEPOINT", node.getName());
-    checkLog(errors);
+    checkLog(errors,log);
   }
 
 }

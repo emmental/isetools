@@ -28,18 +28,14 @@ import org.junit.Before;
  */
 abstract public class TestBase {
 
-  protected final Log log;
-
   @Before
-  public void setUp() throws Exception {
-    log.clear();
+  public void setUp() {
   }
 
   public TestBase() {
-    log = Log.getInstance();
   }
 
-  public void checkLog(String[] codes) {
+  public void checkLog(String[] codes, Log log) {
     if (codes.length != log.count()) {
       System.out.println(log);
     }
@@ -50,7 +46,7 @@ abstract public class TestBase {
     log.clear();
   }
 
-  public void checkLog() {
+  public void checkLog(Log log) {
     if (0 != log.count()) {
       System.out.println(log);
     }

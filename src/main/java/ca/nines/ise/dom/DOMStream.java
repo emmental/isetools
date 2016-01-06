@@ -57,7 +57,7 @@ public class DOMStream {
    * @param source
    * @throws java.io.IOException
    */
-  public DOMStream(InputStream in, String source) throws IOException {
+  public DOMStream(InputStream in, String source, Log log) throws IOException {
     lines = new ArrayList<>();
     boolean warnedSmartQuotes = false;
 
@@ -68,7 +68,7 @@ public class DOMStream {
               .setSource(source)
               .addNote("The byte order mark was " + bom.getCharsetName())
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
       encoding = bom.getCharsetName();
     } else {
       encoding = "UTF-8";
@@ -79,7 +79,7 @@ public class DOMStream {
               .setSource(source)
               .addNote("The incorrect encoding is " + encoding)
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
 
     BufferedReader buffer = new BufferedReader(new InputStreamReader(bomStream, encoding));
@@ -99,7 +99,7 @@ public class DOMStream {
                   .setSource(source)
                   .addNote("The first occurence of smart quotes was at line " + lines.size())
                   .build();
-          Log.addMessage(msg);
+          log.addMessage(msg);
         }
       }
       lines.add(line);
@@ -117,8 +117,8 @@ public class DOMStream {
    *
    * @throws java.io.IOException
    */
-  public DOMStream(String input) throws IOException {
-    this(IOUtils.toInputStream(input, "UTF-8"), "#STRING");
+  public DOMStream(String input, Log log) throws IOException {
+    this(IOUtils.toInputStream(input, "UTF-8"), "#STRING", log);
   }
 
   /**
@@ -130,8 +130,8 @@ public class DOMStream {
    * @throws FileNotFoundException if the file cannot be found.
    * @throws IOException if the file cannot be read.
    */
-  public DOMStream(File input) throws FileNotFoundException, IOException {
-    this(new FileInputStream(input), input.getCanonicalPath());
+  public DOMStream(File input, Log log) throws FileNotFoundException, IOException {
+    this(new FileInputStream(input), input.getCanonicalPath(), log);
   }
 
   /**

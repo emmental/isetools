@@ -53,7 +53,6 @@ public class Syntax extends Command {
   public void execute(CommandLine cmd) throws Exception {
     File[] files;
 
-    Log log = Log.getInstance();
     Locale.setDefault(Locale.ENGLISH);
     PrintStream out = new PrintStream(System.out, true, "UTF-8");
 
@@ -65,6 +64,7 @@ public class Syntax extends Command {
     out.println("Found " + files.length + " files to check.");
     for (File file : files) {
       DOM dom = new DOMBuilder(file).build();
+      Log log = dom.getLog();
       if (log.count() > 0) {
         out.println(log);
         log.clear();

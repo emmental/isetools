@@ -50,14 +50,14 @@ public class EndNodeValidator extends TagNodeValidator<EndNode> {
     "validator.tag.unknown",
     "validator.tag.endempty",})
   @Override
-  public void validate(EndNode n, Schema schema) {
+  public void validate(EndNode n, Schema schema, Log log) {
     Tag t = schema.getTag(n.getName());
     if (t == null) {
       Message m = Message.builder("validator.tag.unknown")
               .fromNode(n)
               .addNote("Tag " + n.getName() + " is not defined in the schema.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
       return;
     }
     if (t.isEmpty()) {
@@ -65,7 +65,7 @@ public class EndNodeValidator extends TagNodeValidator<EndNode> {
               .fromNode(n)
               .addNote("End tag " + n.getName() + " should not occur.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

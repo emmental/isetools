@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 import ca.nines.ise.schema.Schema;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class CharNodeValidator implements NodeValidator<CharNode> {
    * @param schema Schema to validate against.
    */
   @Override
-  public void validate(CharNode n, Schema schema) {
+  public void validate(CharNode n, Schema schema, Log log) {
     try {
       n.expanded();
     } catch (IOException ex) {

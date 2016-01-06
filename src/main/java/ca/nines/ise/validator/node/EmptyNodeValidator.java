@@ -53,29 +53,29 @@ public class EmptyNodeValidator extends TagNodeValidator<EmptyNode> {
     "validator.tag.depreciated"
   })
   @Override
-  public void validate(EmptyNode n, Schema schema) throws AttributeTypeException {
+  public void validate(EmptyNode n, Schema schema, Log log) throws AttributeTypeException {
     Tag t = schema.getTag(n.getName());
     if (t == null) {
       Message m = Message.builder("validator.tag.unknown")
               .fromNode(n)
               .addNote("Tag " + n.getName() + " is not defined in the schema.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
       return;
     }
     if (!t.maybeEmpty()) {
       Message m = Message.builder("validator.tag.emptystart")
               .addNote("Tag " + n.getName() + " should not be self-closing.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
     if (t.isDepreciated()) {
       Message m = Message.builder("validator.tag.depreciated")
               .addNote(t.getDepreciated())
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
-    validate_attributes(n, schema);
+    validate_attributes(n, schema, log);
   }
 
 }

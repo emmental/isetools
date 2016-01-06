@@ -27,11 +27,10 @@ public class LogTest {
 
   @Test
   public void testAddMessage() {
-    Log log = Log.getInstance();
-    log.clear();
+    Log log = new Log();
 
     Message m = Message.builder("foo").build();
-    Log.addMessage(m);
+    log.addMessage(m);
     assertEquals(log.count(), 1);
     assertEquals(log.get(0).getCode(), "foo");
     log.clear();
@@ -42,8 +41,7 @@ public class LogTest {
    */
   @Test
   public void testAdd() {
-    Log log = Log.getInstance();
-    log.clear();
+    Log log = new Log();
 
     Message m = Message.builder("foo").build();
     log.add(m);
@@ -57,7 +55,7 @@ public class LogTest {
    */
   @Test
   public void testClear() {
-    Log log = Log.getInstance();
+    Log log = new Log();
     Message m = Message.builder("foo").build();
     log.add(m);
     assertTrue(log.count() >= 1);

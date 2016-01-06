@@ -43,7 +43,7 @@ public class SpaceCharNodeTest extends TestBase {
   }
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
   }
 
   @After

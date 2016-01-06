@@ -34,8 +34,7 @@ public class DOMStreamTest {
 
   @Before
   public void setUp() {
-    log = Log.getInstance();
-    log.clear();
+    log = new Log();
   }
 
   @Test
@@ -45,7 +44,7 @@ public class DOMStreamTest {
     assertNotNull("URL isn't null.", url);
     File f = new File(url.getFile());
 
-    DOMStream ds = new DOMStream(f);
+    DOMStream ds = new DOMStream(f, log);
     String lines[] = ds.getLines();
     assertEquals(0, log.count());
     assertNull(ds.getBOM());
@@ -59,7 +58,7 @@ public class DOMStreamTest {
     assertNotNull("URL isn't null.", url);
 
     File f = new File(url.getFile());
-    DOMStream ds = new DOMStream(f);
+    DOMStream ds = new DOMStream(f, log);
     String lines[] = ds.getLines();
     assertEquals(1, log.count());
     assertEquals("builder.bom", log.get(0).getCode());
@@ -74,7 +73,7 @@ public class DOMStreamTest {
     assertNotNull("URL isn't null.", url);
 
     File f = new File(url.getFile());
-    DOMStream ds = new DOMStream(f);
+    DOMStream ds = new DOMStream(f, log);
     String lines[] = ds.getLines();
     assertEquals(2, log.count());
     assertEquals("builder.bom", log.get(0).getCode());
@@ -90,7 +89,7 @@ public class DOMStreamTest {
     assertNotNull("URL isn't null.", url);
 
     File f = new File(url.getFile());
-    DOMStream ds = new DOMStream(f);
+    DOMStream ds = new DOMStream(f, log);
     String lines[] = ds.getLines();
     assertEquals(2, log.count());
     assertEquals("builder.bom", log.get(0).getCode());

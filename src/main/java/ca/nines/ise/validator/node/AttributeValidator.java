@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import ca.nines.ise.schema.Attribute;
 
@@ -26,6 +27,6 @@ import ca.nines.ise.schema.Attribute;
  */
 abstract public interface AttributeValidator {
 
-  public void validate(TagNode n, Attribute a);
+  public void validate(TagNode n, Attribute a, Log log);
 
 }

@@ -17,6 +17,7 @@
 package ca.nines.ise.node.chr;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 import ca.nines.ise.node.TagNode;
 import java.util.HashMap;
@@ -56,9 +57,9 @@ public class TypographicCharNode extends CharNode {
   public Fragment expanded() {
     Fragment dom;
     if (charMap.containsKey(text)) {
-      dom = wrap("TYPEFORM", charMap.get(text));
+      dom = wrap("TYPEFORM", charMap.get(text), new Log());
     } else {
-      dom = wrap("TYPEFORM", this.innerText());
+      dom = wrap("TYPEFORM", this.innerText(), new Log());
     }
     ((TagNode) dom.get(0)).setAttribute("t", this.innerText());
     return dom;

@@ -60,13 +60,13 @@ public class AbbrNodeValidator implements NodeValidator<AbbrNode> {
     "validator.abbr.long"
   })
   @Override
-  public void validate(AbbrNode n, Schema schema) {
+  public void validate(AbbrNode n, Schema schema, Log log) {
     Message m;
     m = Message.builder("validator.abbr.depreciated")
             .fromNode(n)
             .addNote("The old abbreviation found was " + n.getText())
             .build();
-    Log.addMessage(m);
+    log.addMessage(m);
 
     if (n.getText().length() > ABBR_LENGTH) {
       m = Message.builder("validator.abbr.long")
@@ -74,7 +74,7 @@ public class AbbrNodeValidator implements NodeValidator<AbbrNode> {
               .addNote("The long abbreviation starts with " + n.getText().substring(0, ABBR_LENGTH))
               .addNote("The abbreviation cannot be corrected automatically.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
     n.expanded();
   }

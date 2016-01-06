@@ -37,6 +37,7 @@ public class SpaceCharNode extends CharNode {
   @Override
   public Fragment expanded() {
     Fragment dom = new Fragment();
+    Log log = dom.getLog();
     EmptyNode node = new EmptyNode(this);
     node.setAttribute("setting", text);
 
@@ -59,7 +60,7 @@ public class SpaceCharNode extends CharNode {
                 .fromNode(this)
                 .addNote("Space markup " + text + " cannot be transformed.")
                 .build();
-        Log.getInstance().add(m);
+        log.add(m);
     }
 
     dom.add(node);

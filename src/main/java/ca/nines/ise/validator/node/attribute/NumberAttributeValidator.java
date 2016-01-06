@@ -51,14 +51,14 @@ public class NumberAttributeValidator implements AttributeValidator {
     "validator.attribute.badnumber"
   })
   @Override
-  public void validate(TagNode n, Attribute attr) {
+  public void validate(TagNode n, Attribute attr, Log log) {
     String value = n.getAttribute(attr.getName());
     if (!value.matches("^[+-]?\\d+(\\.\\d+)?$")) {
       Message m = Message.builder("validator.attribute.badnumber")
               .fromNode(n)
               .addNote("Attribute " + attr.getName() + "=" + value + " does not look like a number.")
               .build();
-      Log.addMessage(m);
+      log.addMessage(m);
     }
   }
 

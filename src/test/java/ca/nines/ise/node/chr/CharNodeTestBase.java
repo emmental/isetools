@@ -17,6 +17,7 @@
 package ca.nines.ise.node.chr;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 import ca.nines.ise.node.Node;
 import ca.nines.ise.node.TagNode;
@@ -40,10 +41,13 @@ abstract public class CharNodeTestBase extends TestBase {
 
   protected void testUnicodify(String text, String unicode, CharNode charNode, String[] errors) throws IOException {
     charNode.setText(text);
-    String u = Normalizer.normalize(charNode.unicode(), Form.NFC);
+    Fragment f = charNode.expanded();
+    String uni = f.unicode();
+    Log log = f.getLog();
+    String u = Normalizer.normalize(uni, Form.NFC);
     String n = Normalizer.normalize(unicode, Form.NFC);
     assertEquals(u, n);
-    checkLog(errors);
+    checkLog(errors,log);
   }
 
   protected void testExpansion(String text, String unicode, CharNode charNode) throws IOException {
@@ -57,6 +61,7 @@ abstract public class CharNodeTestBase extends TestBase {
     charNode.setLine(420);
     charNode.setTLN("11.3");
     Fragment dom = charNode.expanded();
+    Log log = dom.getLog();
     Iterator<Node> iterator = dom.iterator();
     Node node;
 
@@ -84,7 +89,7 @@ abstract public class CharNodeTestBase extends TestBase {
     assertEquals(42, node.getColumn());
     assertEquals(420, node.getLine());
     assertEquals("11.3", node.getTLN());
-    checkLog(errors);
+    checkLog(errors, log);
   }
 
 }

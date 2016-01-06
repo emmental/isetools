@@ -53,6 +53,7 @@ public class AbbrNode extends Node {
 
     String content = text.replaceAll("\\|", "");
     Fragment fragment = new Fragment();
+    Log log = fragment.getLog();
     TagNode node = new StartNode(this);
     node.setName("ABBR");
 
@@ -78,7 +79,7 @@ public class AbbrNode extends Node {
                 .fromNode(this)
                 .addNote("The syntax error occurs in " + text)
                 .build();
-        Log.getInstance().add(msg);
+        log.add(msg);
       }
       TextNode tn = new TextNode(this);
       tn.setText(content);

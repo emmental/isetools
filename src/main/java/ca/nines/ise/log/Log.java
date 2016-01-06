@@ -24,45 +24,29 @@ import java.util.List;
 /**
  * Log collects error messages generated during parsing and validation.
  * <p>
- * Log is a singleton: use getInstance() to get an object, rather than new().
- * <p>
  * @author Michael Joyce <ubermichael@gmail.com>
  */
 public final class Log {
 
   /**
-   * Singleton instance.
-   */
-  private static final Log instance = new Log();
-
-  /**
    * List of messages.
    */
-  private static final List<Message> messages = new ArrayList<>();
+  private List<Message> messages;
 
   /**
    * Convenience method to add a message to the log.
    *
    * @param m
    */
-  public static void addMessage(Message m) {
-    instance.add(m);
-  }
-
-  /**
-   * Get an instance of the log.
-   * <p>
-   * @return log instance.
-   */
-  public static Log getInstance() {
-    return instance;
+  public void addMessage(Message m) {
+    add(m);
   }
 
   /**
    * Log is a singleton. Use #getInstance().
    */
-  private Log() {
-    // do nothing.
+  public Log() {
+    messages = new ArrayList<>();
   }
 
   /**
@@ -123,6 +107,9 @@ public final class Log {
     for (Message message : messages()) {
       formatter.format("%s%n", message);
     }
-    return formatter.toString();
+    String fm = formatter.toString();
+    formatter.close();
+    
+    return fm;
   }
 }

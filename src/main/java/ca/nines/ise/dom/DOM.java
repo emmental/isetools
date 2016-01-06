@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.dom;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.EmptyNode;
 import ca.nines.ise.node.EndNode;
 import ca.nines.ise.node.Node;
@@ -38,6 +39,11 @@ import java.util.Map;
  * later.
  */
 public class DOM implements Iterable<Node> {
+  
+  /**
+   * Logs for this DOM
+   */
+  private Log log;
 
   /**
    * An index of TLNs => Nodes
@@ -84,10 +90,23 @@ public class DOM implements Iterable<Node> {
    * Construct a new, empty DOM.
    */
   public DOM() {
+    log = new Log();
     nodes = new ArrayList<>();
     index = new HashMap<>();
     reindex = true;
     status = DOMStatus.CLEAN;
+  }
+
+  /**
+   * Construct a new, empty DOM with a log.
+   */
+  public DOM(Log l){
+    log = l;
+    nodes = new ArrayList<>();
+    index = new HashMap<>();
+    reindex = true;
+    status = DOMStatus.CLEAN;
+    
   }
 
   /**
@@ -239,7 +258,7 @@ public class DOM implements Iterable<Node> {
    * @return a piece of the DOM
    */
   public Fragment getTlnFragment(String tln, int length) {
-    Fragment fragment = new Fragment();
+    Fragment fragment = new Fragment(log);
     if (needsReindex()) {
       index();
     }
@@ -453,6 +472,13 @@ public class DOM implements Iterable<Node> {
    */
   public void setSource(String source) {
     this.source = source;
+  }
+  
+  /**
+   * Returns this DOM's log
+   */
+  public Log getLog(){
+    return log;
   }
 
 }

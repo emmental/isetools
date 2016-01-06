@@ -17,6 +17,7 @@
 package ca.nines.ise.node.chr;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 import ca.nines.ise.node.Node;
 import ca.nines.ise.node.StartNode;
@@ -47,7 +48,7 @@ public class TypographicCharNodeTest extends TestBase {
   }
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
   }
 
   @After
@@ -77,6 +78,7 @@ public class TypographicCharNodeTest extends TestBase {
     charNode.setLine(420);
     charNode.setTLN("11.3");
     Fragment dom = charNode.expanded();
+    Log log = dom.getLog();
     Iterator<Node> iterator = dom.iterator();
     Node node;
 
@@ -107,7 +109,7 @@ public class TypographicCharNodeTest extends TestBase {
     assertEquals(420, node.getLine());
     assertEquals("11.3", node.getTLN());
     assertEquals("TYPEFORM", node.getName());
-    checkLog(errors);
+    checkLog(errors,log);
   }
 
 }

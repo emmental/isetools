@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node.attribute;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import ca.nines.ise.schema.Attribute;
 import ca.nines.ise.node.TagNodeImpl;
@@ -42,6 +43,7 @@ public class NumberAttributeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     TagNode n = new TagNodeImpl();
     Attribute attr;
     NumberAttributeValidator validator = new NumberAttributeValidator();
@@ -50,28 +52,28 @@ public class NumberAttributeValidatorTest extends ValidatorTestBase {
     attr = schema.getTag(n.getName()).getAttribute("n");
 
     n.setAttribute("n", "5");
-    validator.validate(n, attr);
-    checkLog(new String[]{});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("n", "5.5");
-    validator.validate(n, attr);
-    checkLog(new String[]{});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("n", "+5.5");
-    validator.validate(n, attr);
-    checkLog(new String[]{});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("n", "-5.533");
-    validator.validate(n, attr);
-    checkLog(new String[]{});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("n", "-.533");
-    validator.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badnumber"});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badnumber"},log);
 
     n.setAttribute("n", "Where's my elephant?");
-    validator.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badnumber"});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badnumber"},log);
   }
 
 }

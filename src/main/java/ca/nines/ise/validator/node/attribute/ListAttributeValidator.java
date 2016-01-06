@@ -50,7 +50,7 @@ public class ListAttributeValidator implements AttributeValidator {
     "validator.attribute.badlist"
   })
   @Override
-  public void validate(TagNode n, Attribute attr) {
+  public void validate(TagNode n, Attribute attr, Log log) {
     String values[] = n.getAttribute(attr.getName()).split(", ?");
     String[] options = attr.getOptions();
     for (String value : values) {
@@ -59,7 +59,7 @@ public class ListAttributeValidator implements AttributeValidator {
                 .fromNode(n)
                 .addNote("Attribute " + attr.getName() + " cannot contain " + value)
                 .build();
-        Log.addMessage(m);
+        log.addMessage(m);
       }
     }
   }

@@ -17,6 +17,7 @@
 package ca.nines.ise.node.chr;
 
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.CharNode;
 
 /**
@@ -33,7 +34,7 @@ public class LigatureCharNode extends CharNode {
    */
   @Override
   public Fragment expanded() {
-    return wrap("LIG", this.innerText());
+    return wrap("LIG", this.innerText(), new Log());
   }
 
   /**

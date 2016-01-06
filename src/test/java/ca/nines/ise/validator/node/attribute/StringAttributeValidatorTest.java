@@ -16,6 +16,7 @@
  */
 package ca.nines.ise.validator.node.attribute;
 
+import ca.nines.ise.log.Log;
 import ca.nines.ise.node.TagNode;
 import ca.nines.ise.schema.Attribute;
 import ca.nines.ise.node.TagNodeImpl;
@@ -42,6 +43,7 @@ public class StringAttributeValidatorTest extends ValidatorTestBase {
    */
   @Test
   public void testValidate() {
+    Log log = new Log();
     TagNode n = new TagNodeImpl();
     Attribute attr;
     StringAttributeValidator validator = new StringAttributeValidator();
@@ -50,16 +52,16 @@ public class StringAttributeValidatorTest extends ValidatorTestBase {
     n.setAttribute("n", "foo");
     attr = schema.getTag(n.getName()).getAttribute("n");
 
-    validator.validate(n, attr);
-    checkLog(new String[]{});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{},log);
 
     n.setAttribute("n", "");
-    validator.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badstring"});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badstring"},log);
 
     n.setAttribute("n", "     ");
-    validator.validate(n, attr);
-    checkLog(new String[]{"validator.attribute.badstring"});
+    validator.validate(n, attr,log);
+    checkLog(new String[]{"validator.attribute.badstring"},log);
   }
 
 }
