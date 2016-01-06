@@ -258,7 +258,7 @@ public class DOM implements Iterable<Node> {
    * @return a piece of the DOM
    */
   public Fragment getTlnFragment(String tln, int length) {
-    Fragment fragment = new Fragment(log);
+    Fragment fragment = new Fragment();
     if (needsReindex()) {
       index();
     }

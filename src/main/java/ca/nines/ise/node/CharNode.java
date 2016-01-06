@@ -135,9 +135,8 @@ abstract public class CharNode extends Node {
    * @param content
    * @return Fragment wrapping content.
    */
-  protected Fragment wrap(String tagName, String content, Log l) {
-    Fragment dom = new Fragment(l);
-    Log log = dom.getLog();
+  protected Fragment wrap(String tagName, String content, Log log) {
+    Fragment dom = new Fragment(log);
     TagNode node;
 
     node = new StartNode(this);
