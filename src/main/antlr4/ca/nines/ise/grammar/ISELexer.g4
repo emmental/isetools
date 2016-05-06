@@ -96,7 +96,11 @@ TAG_START
 
 // general content.
 TEXT 
-    : ~[<{|]+ 
+    : ~[<{|\n]+ 
+    ;
+
+NEWLINE
+    : '\n'
     ;
 
 mode TAG ;
@@ -123,7 +127,7 @@ TAG_NAME
     ;
 
 TAG_WS
-    : [ \r\t\n]+ -> skip
+    : [ \r\t\n]+ -> channel(HIDDEN)
     ;
 
 // Parsing attribute values

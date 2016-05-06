@@ -16,7 +16,10 @@
  */
 package ca.nines.ise.node;
 
+import ca.nines.ise.node.attribute.AttributeSet;
 import ca.nines.ise.dom.Fragment;
+import ca.nines.ise.node.attribute.Attribute;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.LinkedHashMap;
@@ -36,7 +39,7 @@ abstract public class TagNode extends Node {
     /**
      * Name,value pairs for attributes.
      */
-    protected Map<String, String> attributes = new LinkedHashMap<>();
+    protected AttributeSet attributes;
 
     /**
      * Name of the tag.
@@ -49,7 +52,7 @@ abstract public class TagNode extends Node {
     public TagNode() {
         super();
         this.tagname = "";
-        this.attributes = new LinkedHashMap<>();
+        this.attributes = new AttributeSet();
     }
 
     /**
@@ -57,16 +60,22 @@ abstract public class TagNode extends Node {
      */
     public TagNode(Node n) {
         super(n);
+        this.attributes = new AttributeSet();
         if (n instanceof TagNode) {
-            this.tagname = ((TagNode) n).tagname;
-            this.attributes = new LinkedHashMap<>(((TagNode) n).attributes);
+            TagNode tn = (TagNode) n;
+            this.tagname = tn.tagname;
+            this.attributes = new AttributeSet();
+            for(Attribute a : tn.attributes.getAttributes()) {
+                this.attributes.setAttribute(a);
+            }
         }
     }
-
+ 
     /**
      * Create a new tag node with a name.
      */
     public TagNode(String tagname) {
+        this.attributes = new AttributeSet();
         this.tagname = tagname;
     }
 
@@ -74,10 +83,10 @@ abstract public class TagNode extends Node {
      * Remove all the attributes on a tag.
      */
     public void clearAttributes() {
-        if (attributes.containsKey("n") && ownerDom != null) {
+        if (attributes.hasAttribute("n") && ownerDom != null) {
             ownerDom.requestReindex();
         }
-        attributes.clear();
+        attributes.clearAttributes();
     }
 
     /**
@@ -86,10 +95,10 @@ abstract public class TagNode extends Node {
      * @param name
      */
     public void deleteAttribute(String name) {
-        if (attributes.containsKey("n")) {
+        if (attributes.hasAttribute("n")) {
             ownerDom.requestReindex();
         }
-        attributes.remove(name);
+        attributes.deleteAttribute(name);
     }
 
     /**
@@ -110,7 +119,27 @@ abstract public class TagNode extends Node {
      * @return String
      */
     public String getAttribute(String name) {
-        return attributes.get(name.toLowerCase());
+        return getAttribute(name, false);
+    }
+
+    /**
+     * Get an attribute value. Attribute names are case insensitive.
+     * <p>
+     * @param name
+     * <p>
+     * @return String
+     */
+    public String getAttribute(String name, boolean unicodify) {
+        try {
+            Attribute a = attributes.getAttribute(name);
+            if(a == null) {
+                return null;
+            }
+            return a.getValue(unicodify);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Cannot get attribute " + name, ex);
+            return attributes.getAttribute(name).getValue();
+        }
     }
 
     /**
@@ -121,7 +150,7 @@ abstract public class TagNode extends Node {
      * @return boolean
      */
     public boolean hasAttribute(String name) {
-        return attributes.containsKey(name.toLowerCase());
+        return attributes.hasAttribute(name);
     }
 
     /**
@@ -130,8 +159,21 @@ abstract public class TagNode extends Node {
      * @return String of sorted original-case attribute names.
      */
     public String[] getAttributeNames() {
-        String[] names = attributes.keySet().toArray(new String[attributes.size()]);
+        String[] names = attributes.getAttributeNames();
         Arrays.sort(names);
+        return names;
+    }
+
+    /**
+     * Return a list of attribute names, in their original cases and order.
+     * 
+     * @param preserveOrder preserve the original order if true, otherwise 
+     * sort the attributes by name.
+     * 
+     * @return String of sorted original-case attribute names.
+     */
+    public String[] getAttributeNames(boolean preserveOrder) {
+        String[] names = attributes.getAttributeNames();
         return names;
     }
 
@@ -176,10 +218,13 @@ abstract public class TagNode extends Node {
      * @param value
      */
     public void setAttribute(String name, String value) {
-        if (name.equals("n") && ownerDom != null) {
+        if(attributes == null) {
+            logger.log(Level.SEVERE, "attributes is null. wtf.");
+        }
+        attributes.setAttribute(new Attribute(name, value));
+        if (name.equalsIgnoreCase("n") && ownerDom != null) {
             ownerDom.requestReindex();
         }
-        attributes.put(name.toLowerCase(), value);
     }
 
     /**
@@ -211,8 +256,8 @@ abstract public class TagNode extends Node {
         Formatter formatter = new Formatter();
         formatter.format("%s", super.toString());
         formatter.format(":%s(", tagname);
-        for (String name : attributes.keySet()) {
-            formatter.format("@%s=%s ", name, attributes.get(name));
+        for (String name : attributes.getAttributeNames()) {
+            formatter.format("@%s=%s ", name, attributes.getAttribute(name).getValue());
         }
         formatter.format(")");
         return formatter.toString();

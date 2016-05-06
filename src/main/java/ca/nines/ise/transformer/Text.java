@@ -16,9 +16,12 @@
  */
 package ca.nines.ise.transformer;
 
-import ca.nines.ise.node.Node;
 import ca.nines.ise.node.NodeType;
 import ca.nines.ise.node.TextNode;
+import ca.nines.ise.util.TextReplacementTable;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Normalize an ISE document, by combining adjacent text nodes and fixing up
@@ -26,10 +29,21 @@ import ca.nines.ise.node.TextNode;
  *
  * @author Michael Joyce <ubermichael@gmail.com>
  */
-public class Normalizer extends IdentityTransform {
+public class Text extends IdentityTransform {
 
-    private StringBuilder sb = new StringBuilder();
-
+    private static TextReplacementTable tbl = null;
+    
+    public Text() {
+        super();
+        if(tbl == null) {
+            try {
+                tbl = TextReplacementTable.defaultTextReplacementTable();
+            } catch (IOException ex) {
+                Logger.getLogger(Text.class.getName()).log(Level.SEVERE, "Cannot load default text replacement table.", ex);
+            }
+        }
+    }
+    
     /**
      * Transform a text node, by appending the next text node if there is one.
      *
@@ -38,19 +52,13 @@ public class Normalizer extends IdentityTransform {
      * @param n
      */
     public void text(TextNode n) {
-        System.out.println("Normalizing " + n);
-        sb.append(n.getText());
-
-        if (peek().type() != NodeType.TEXT) {
-            TextNode txt = new TextNode(n);
-            String s = sb.toString();
-            sb = new StringBuilder();
-            s = s.replaceAll("[ \\t\\x0B\\f\\r]+", " ");
-            s = s.replaceAll("\\n\\s+", "\n");
-            s = s.replaceAll("\\n\\n+", "\n");
-            txt.setText(s);
-            dom.add(txt);
+        String s = n.getText();
+        for(String src : tbl.getSources()) {
+            s = s.replace(src, tbl.getReplacement(src));
         }
+        TextNode txt = new TextNode(n);
+        txt.setText(s);
+        dom.add(txt);
     }
 
 }
