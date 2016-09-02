@@ -48,32 +48,8 @@ public class NestingValidator {
       nodeStack.pop();
       return;
     }
-<<<<<<< HEAD
 
     Message m = Message.builder("validator.nesting.split_tag")
-=======
-    
-    Tag t = schema.getTag(n.getName());
-    List<String> noSplit = null;
-    if (t != null)
-      noSplit = Arrays.asList(t.getNoSplit().split(",[ ]*"));
-    
-    if (noSplit != null && !noSplit.isEmpty()){
-      String splitTags = "";
-      for (StartNode s : nodeStack){
-        for (String ns : noSplit){
-          if (s.getName().toLowerCase().equals(ns.toLowerCase()))
-            splitTags += ns + " ";
-        }
-        if (s.getName().toLowerCase().equals(n.getName().toLowerCase())){
-          nodeStack.remove(s);
-          break;
-        }
-      }
-      
-      if (!splitTags.equals("")){
-        Message m = Message.builder("validator.nesting.split")
->>>>>>> 9e1be3d... more validator bug fixes; more functions added to validatorStack
             .fromNode(n)
             .addNote("Tag " + n.getName() + " splits other tags.")
             .build();
@@ -86,7 +62,6 @@ public class NestingValidator {
       if (start.getName().toLowerCase().equals(n.getName().toLowerCase())) {
         break; // while.
       }
-<<<<<<< HEAD
       splitStack.push(start);
     }
 
@@ -101,12 +76,6 @@ public class NestingValidator {
     while (splitStack.size() >= 1) {
       nodeStack.push(splitStack.pop());
     }
-=======
-    }else{
-      nodeStack.remove_first(n);
-    }
-  }
->>>>>>> 9e1be3d... more validator bug fixes; more functions added to validatorStack
 
   }
 
