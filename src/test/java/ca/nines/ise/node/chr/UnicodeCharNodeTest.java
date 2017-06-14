@@ -68,6 +68,8 @@ public class UnicodeCharNodeTest extends TestBase {
     testExpansion("{C}", "\u00C7");
     testExpansion("{th}", "\u00FE");
     testExpansion("{TH}", "\u00DE");
+    testExpansion("{Y}", "\u021C");
+    testExpansion("{y}", "\u021D");
     testExpansion("{pd}", "\uFFFD", new String[]{"char.unicode.unknown"});
   }
 
