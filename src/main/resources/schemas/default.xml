@@ -322,7 +322,7 @@
       </attribute>
     </tag>
     <tag name="LABEL" where="all" xml_unparsed_text="yes">
-		<desc><![CDATA[Label]]></desc>
+		<desc><![CDATA[Label for a BRACEGROUP]]></desc>
     </tag>
     <tag name="LB" depreciated="Use L on an empty line instead of LB to preserve empty lines." where="anywhere" empty="yes">
       <desc><![CDATA[Previously used for line break. <L/> is recommended.]]></desc>
