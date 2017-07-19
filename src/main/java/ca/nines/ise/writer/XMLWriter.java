@@ -926,8 +926,17 @@ public class XMLWriter extends Writer{
 		 */
 		public void new_align(String name) {
 			align = name;
-			if (in_line())
-				change_align();
+			if (in_line()) {
+        if (
+          "right".equals(name) &&
+          get_last_tag("l").getValue().trim().length() > 0
+        ) {
+          // already has non-RA content
+          start_element(new Element("ra", DOC_NS));
+        } else {
+				  change_align();
+        }
+      }
 		}
 
 		/**
@@ -1456,6 +1465,9 @@ public class XMLWriter extends Writer{
    			xmlStack.empty_element(xmlStack.new_element("main"));
    			break;
    		case "RA":
+        xmlStack.end_tag_and_renew_descendants("ra");
+        xmlStack.align = null;
+        break;
    		case "C":
    		case "J":
    			xmlStack.align = null;

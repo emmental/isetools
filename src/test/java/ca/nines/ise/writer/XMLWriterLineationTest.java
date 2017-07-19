@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -110,7 +110,7 @@ public class XMLWriterLineationTest extends XMLWriterTestBase {
 
     @Test
     public void applyAlignmentToLine() throws SAXException, ParserConfigurationException, TransformerException {
-        Document output = render("<WORK>a<RA>\nb</RA>\nc</WORK>");
+        Document output = render("<WORK>a<C>\nb</C>\nc</WORK>");
         Nodes lines = output.query("//"+DOC_PREFIX+":l", NS_MAP);
         String a1 = ((Element) lines.get(0)).getAttributeValue("align");
         String a2 = ((Element) lines.get(1)).getAttributeValue("align");
@@ -126,6 +126,54 @@ public class XMLWriterLineationTest extends XMLWriterTestBase {
         );
     }
 
+    @Test
+    public void applyRightAlignment() throws SAXException, ParserConfigurationException, TransformerException {
+        Document output = render("<WORK>a<RA>b\nc</RA>\nd</WORK>");
+        Nodes lines = output.query("//"+DOC_PREFIX+":l", NS_MAP);
+        assertThat(
+            "first line is not aligned",
+            ((Element) lines.get(0)).getAttributeValue("align"),
+            nullValue()
+        );
+        assertThat(
+            "first line contains <ra>", 
+            lines.get(0).query("descendant::"+DOC_PREFIX+":ra", NS_MAP).size(),
+            is(1)
+        );
+        assertThat(
+            "second line is aligned right",
+            ((Element) lines.get(1)).getAttributeValue("align"),
+            is("right")
+        );
+        assertThat(
+            "second line does not contain <ra>",
+            lines.get(1).query("descendant::"+DOC_PREFIX+":ra", NS_MAP).size(),
+            is(0)
+        );
+        assertThat(
+            "third line is not aligned",
+            ((Element) lines.get(2)).getAttributeValue("align"),
+            nullValue()
+        );
+    }
+
+    @Test
+    public void applyFullRightAlignment() throws  SAXException, ParserConfigurationException, TransformerException {
+        Document output = render("<WORK> <RA>hello\nworld</RA></WORK>");
+        Nodes ra = output.query("//"+DOC_PREFIX+":ra", NS_MAP);
+        assertThat(
+            "no <ra> when applied to full line",
+            ra.size(),
+            is(0)
+        );
+        Nodes lines = output.query("//"+DOC_PREFIX+":l", NS_MAP);
+        assertTrue("two lines", lines.size() == 2);
+        assertTrue(
+            "both aligned right",
+            "right".equals(((Element) lines.get(0)).getAttributeValue("align")) &&
+            "right".equals(((Element) lines.get(1)).getAttributeValue("align"))
+        );
+    }
 
     private void translateMilestone(String type) throws SAXException, ParserConfigurationException, TransformerException {
         Document output = render("<WORK><"+type.toUpperCase()+" n=\"1\"/></WORK>");
