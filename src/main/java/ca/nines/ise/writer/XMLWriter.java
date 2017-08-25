@@ -107,6 +107,7 @@ public class XMLWriter extends Writer{
 			TYPEFACES = array_to_lower(schema.get_typeface_tags());
 			DONT_PARSE_TEXT = array_to_lower(schema.get_unparsed_text_tags());
 			LINE_PARENTS = array_to_lower(schema.get_line_parent_tags());
+			LINE_PARENTS.add("splitline");
 		  renewable = schema.get_Inline_tags();
 			this.xml = xml;
 			renewing = new LinkedList<LinkedList<Element>>();

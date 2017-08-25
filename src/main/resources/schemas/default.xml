@@ -416,9 +416,6 @@
     <tag name="BRACEGROUP" where="all" xml_line_parent="yes">
 		<desc><![CDATA[Bracegroup]]></desc>
     </tag>
-    <tag name="SPLITLINE" where="all" xml_line_parent="yes">
-		<desc><![CDATA[Line split into multiple lines]]></desc>
-    </tag>
     <tag name="MARG" where="all" xml_line_parent="yes">
       <desc><![CDATA[Marginalia]]></desc>
       <attribute name="loc" type="select">
